@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<tiles-definitions>
+    <definition name="main.page" page="/layout.jsp">
+        <put name="header" value="/header.jsp"/>
+        <put name="body" value="/body.jsp"/>
+        <put name="footer" value="/footer.jsp"/>
+    </definition>
+
+    <definition name="index.page" extends="main.page">
+        <put name="body" value="/HelloWorld.jsp"/>
+    </definition>
+</tiles-definitions>

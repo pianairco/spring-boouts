@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+    <context:annotation-config/>
+
+<!--    <bean id="formManagerProvider" class="org.broker.web.customer.FormManagerProvider" init-method="init" scope="singleton">-->
+<!--        <property name="jsonResources">-->
+<!--            <list>-->
+<!--                <value>/queries/fund-question-form.json</value>-->
+<!--                <value>/queries/fund-license-form.json</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--        <property name="sqlManagerProvider">-->
+<!--            <ref bean="sqlManagerProvider"></ref>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+<!--    <bean id="sqlManagerProvider" class="org.broker.web.customer.SQLManagerProvider" init-method="init" scope="singleton">-->
+<!--        <property name="jsonResources">-->
+<!--            <list>-->
+<!--                <value>/queries/fund-question-query.json</value>-->
+<!--                <value>/queries/fund-license-query.json</value>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+<!--    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+<!--        <property name="location">-->
+<!--            <value>classpath:jdbc.properties</value>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+</beans>
