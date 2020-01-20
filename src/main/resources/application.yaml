@@ -1,0 +1,33 @@
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  jpa:
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate.ddl-auto: update
+    generate-ddl: true
+    show-sql: true
+    database: oracle
+    datasource:
+      hikari:
+        maximum-pool-size: 100
+app:
+  datasource:
+    t2anf04:
+      url: jdbc:oracle:thin:@//192.168.6.212:1521/devtwo
+      username: t2anf04
+      password: t
+      driver-class-name: oracle.jdbc.OracleDriver
+      #      username: ENC(T61OR4n2348HIsbJhHZq7GC96ZMdLnY6tQjbTaWMnpjzLuTNQDiVw0jVLHeXzpGq)
+      #      password: ENC(2hffX1UdpEMMbGQE03vctAiskblbN83Ado4NzJM3Vn4pcufKSxskUX0k5A3/8+Ow)
+    t2anf03:
+      url: jdbc:oracle:thin:@//192.168.6.212:1521/devtwo
+      username: t2anf04
+      password: t
+      driver-class-name: oracle.jdbc.OracleDriver
+      #      username: ENC(sNHAkOqhnXxEWtR3JLkjKhBD0H8EhCETtnc88zNBD31/nNbCOeBw82qau/NgyNZK)
+      #      password: ENC(Yp/w4/4a0YTuCmozVgrhmZat5jKGV9NkpN+TEl/E0Vn8acHq7HIcmUuMwDaI0Gic)
+  piana:
+    sql-manager:
+      resources: /query/fund-query.json
