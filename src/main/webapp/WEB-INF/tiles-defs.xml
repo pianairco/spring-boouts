@@ -9,4 +9,8 @@
     <definition name="index.page" extends="main.page">
         <put name="body" value="/HelloWorld.jsp"/>
     </definition>
+
+    <definition name="common.page" extends="main.page">
+        <put name="body" value="/common.jsp"/>
+    </definition>
 </tiles-definitions>

@@ -4,4 +4,7 @@
 
 <beans>
     <bean name="helloWorld" class="ir.piana.dev.struts.action.HelloWorldAction" scope="prototype" />
+
+    <bean name="customerMessage" class="ir.piana.dev.struts.action.CustomerMessageAction" scope="prototype">
+    </bean>
 </beans>

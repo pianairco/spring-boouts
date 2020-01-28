@@ -1,0 +1,107 @@
+[
+  {
+    "name": "/customerMessage@persist",
+    "type": "persist",
+    "title": "\u067E\u0627\u0633\u062E\u06AF\u0648\u06CC\u06CC \u0645\u062F\u06CC\u0631",
+    "id-param": "insert.fund-question.question-id",
+    "query-update-name": "update-fund-question",
+    "control-in-row": 2,
+    "initial-select": [
+      { "name": "selectFundQuestion", "query-name": "select-fund-question", "mapper": [
+        "questionId:insert.fund-question.question-id",
+        "cellPhone:insert.fund-question.cell-phone",
+        "cellPhone:insert.fund-question.cellPhone",
+        "createCustomerId:insert.fund-question.createCustomerId",
+        "questionDesc:insert.fund-question.question-desc",
+        "answerDesc:insert.fund-question.answer-desc",
+        "createDate:insert.fund-question.create-date"
+      ]},
+      { "name": "statusList", "query-name": "base-question-status-type" },
+      { "name": "selectCompanySmsNumber", "query-name": "select-company-sms-number", "mapper": [
+        "companySmsNumber:companySmsNumber"
+      ]}
+    ],
+    "control": [
+      { "name": "insert.fund-question.question-id", "title": "\u0648\u0636\u0639\u06CC\u062A", "type": "hidden" },
+      { "name": "insert.fund-question.createCustomerId", "title": "\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06CC\u0644", "type": "hidden" },
+      { "name": "insert.fund-question.cellPhone", "title": "\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06CC\u0644", "type": "hidden" },
+      { "name": "insert.fund-question.cell-phone", "title": "\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06CC\u0644", "type": "string", "disabled": "true" },
+      { "name": "insert.fund-question.create-date", "title": "\u062A\u0627\u0631\u06CC\u062E \u062B\u0628\u062A \u0633\u0648\u0627\u0644", "type": "date", "disabled": "true" },
+      { "name": "insert.fund-question.question-desc", "title": "\u067E\u0631\u0633\u0634", "type": "text", "disabled": "true" },
+      { "name": "insert.fund-question.answer-desc", "title": "\u067E\u0627\u0633\u062E", "type": "text" }
+    ],
+    "button": [
+      { "name": "save", "type": "submit", "activities": [ "response" ], "title": "\u0630\u062E\u064A\u0631\u0647", "title-key": "button.save" },
+      { "name": "redirect", "type": "redirect", "title": "\u0628\u0627\u0632\u06AF\u0634\u062A", "title-key": "button.return",
+        "return-url": "customerMessage.do?method=list&activity=questions" }
+    ],
+    "activities": [
+      {
+        "name": "response",
+        "operations": [
+          {
+            "order": "1",
+            "type": "query",
+            "name": "update-fund-question"
+          },
+          {
+            "order": "2",
+            "type": "function",
+            "name": "sendSms"
+          },
+          {
+            "order": "3",
+            "type": "query",
+            "name": "update-fund-question-status-to-answer"
+          }
+        ],
+        "success-message": {
+          "message-key": "message.saved",
+          "parameters": [
+            "insert.fund-question.question-id"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "/customerMessage@list",
+    "type": "list",
+    "title": "\u067E\u06CC\u0627\u0645\u0647\u0627\u06CC \u06A9\u0627\u0631\u0628\u0631\u0627\u0646 \u0628\u0647 \u0647\u0645\u0631\u0627\u0647 \u0635\u0646\u062F\u0648\u0642",
+    "query-name": "fund-questions",
+    "control-in-row": 1,
+    "initial-select": [
+      { "name": "statusList", "query-name": "base-question-status-type" }
+    ],
+    "control": [
+      { "name": "search.fund-question.status", "title": "\u0648\u0636\u0639\u06CC\u062A", "type": "select", "items": "statusList", "option-value": "statusTypeId", "option-title": "title" },
+      { "name": "search.fund-question.ticket-number", "title": "\u0634\u0645\u0627\u0631\u0647 \u062A\u06CC\u06A9\u062A", "type": "number" },
+      { "name": "search.fund-question.cell-phone", "title": "\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06CC\u0644", "type": "string" },
+      { "name": "search.fund-question.from-create-date", "title": "\u0627\u0632 \u062A\u0627\u0631\u06CC\u062E", "type": "date" },
+      { "name": "search.fund-question.to-create-date", "title": "\u062A\u0627 \u062A\u0627\u0631\u06CC\u062E", "type": "date" }
+    ],
+    "button": [
+      { "name": "clear", "type": "reset", "title": "\u067E\u06CC\u0634 \u0641\u0631\u0636", "title-key": "button.reset" },
+      { "name": "submit", "type": "submit", "activities": [ "questions" ], "title": "\u062C\u0633\u062A\u062C\u0648", "title-key": "button.search" }
+    ],
+    "decorator": "org.broker.web.customer.CustomerMessageDecorator",
+    "rowPerPageParamName": "rowPerPage",
+    "table-activity": "questions",
+    "columns": [
+      { "property": "questionId", "title": "\u0634\u0645\u0627\u0631\u0647 \u062A\u06CC\u06A9\u062A", "style-class": "", "sortable": "true" },
+      { "property": "name", "title": "\u0646\u0627\u0645 \u0648 \u0646\u0627\u0645 \u062E\u0627\u0646\u0648\u0627\u062F\u06AF\u06CC", "style-class": "", "sortable": "false" },
+      { "property": "cellPhone", "title": "\u0634\u0645\u0627\u0631\u0647 \u0645\u0648\u0628\u0627\u06CC\u0644", "style-class": "", "sortable": "true" },
+      { "property": "isCustomer", "title": "\u0645\u0634\u062A\u0631\u06CC \u0635\u0646\u062F\u0648\u0642", "style-class": "", "sortable": "false" },
+      { "property": "createDate", "title": "\u062A\u0627\u0631\u06CC\u062E \u062B\u0628\u062A \u0633\u0648\u0627\u0644", "style-class": "", "sortable": "true" },
+      { "property": "statusType", "title": "\u0648\u0636\u0639\u06CC\u062A", "style-class": "" }
+    ],
+    "activities": [
+      {
+        "name": "questions",
+        "operations": [
+          { "order":  "1", "type": "query-string", "name": "fund-questions" }
+        ]
+      }
+    ]
+  }
+]

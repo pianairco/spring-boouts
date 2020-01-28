@@ -23,9 +23,8 @@ public class HelloWorldAction extends DispatchAction {
         HelloWorldForm helloWorldForm = (HelloWorldForm) form;
         helloWorldForm.setMessage("Hello World! Struts");
 
-//        String appParam = testDao.getAppParam();
-
-//        System.out.println(appParam);
+        String appParam = testDao.getAppParam();
+        System.out.println(appParam);
 
         return mapping.findForward("success");
     }

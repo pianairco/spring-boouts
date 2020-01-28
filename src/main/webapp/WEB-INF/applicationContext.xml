@@ -10,17 +10,18 @@
         http://www.springframework.org/schema/context/spring-context-2.5.xsd">
     <context:annotation-config/>
 
-<!--    <bean id="formManagerProvider" class="org.broker.web.customer.FormManagerProvider" init-method="init" scope="singleton">-->
-<!--        <property name="jsonResources">-->
-<!--            <list>-->
-<!--                <value>/queries/fund-question-form.json</value>-->
-<!--                <value>/queries/fund-license-form.json</value>-->
-<!--            </list>-->
-<!--        </property>-->
-<!--        <property name="sqlManagerProvider">-->
-<!--            <ref bean="sqlManagerProvider"></ref>-->
-<!--        </property>-->
-<!--    </bean>-->
+
+    <bean id="formManagerProvider" class="FormManagerProvider" init-method="init" scope="singleton">
+        <property name="jsonResources">
+            <list>
+                <value>/queries/fund-question-form.json</value>
+                <value>/queries/fund-license-form.json</value>
+            </list>
+        </property>
+        <property name="sqlManagerProvider">
+            <ref bean="sqlManagerProvider"></ref>
+        </property>
+    </bean>
 
 <!--    <bean id="sqlManagerProvider" class="org.broker.web.customer.SQLManagerProvider" init-method="init" scope="singleton">-->
 <!--        <property name="jsonResources">-->

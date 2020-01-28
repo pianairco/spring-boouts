@@ -1,0 +1,58 @@
+[
+  {
+    "name": "/fundLicenseRequest@list",
+    "title": "\u062F\u0631\u062E\u0648\u0627\u0633\u062A \u0647\u0627\u06CC \u0627\u0635\u0644 \u06AF\u0648\u0627\u0647\u06CC",
+    "query-name":"select-fund-license-request",
+    "type": "list",
+    "control-in-row": 1,
+    "initial-select": [
+      { "name": "fundRequestStateList", "query-name": "select-fund-request-state" }
+    ],
+    "control": [
+      { "name": "search.fund-license-request.request-state", "title": "\u0648\u0636\u0639\u06CC\u062A \u062F\u0631\u062E\u0648\u0627\u0633\u062A", "type": "select", "items": "fundRequestStateList", "option-value": "requestStateId", "option-title": "requestStateName" },
+      { "name": "search.fund-license-request.from-create-date", "title": "\u0627\u0632 \u062A\u0627\u0631\u06CC\u062E", "type": "date" },
+      { "name": "search.fund-license-request.to-create-date", "title": "\u062A\u0627 \u062A\u0627\u0631\u06CC\u062E", "type": "date" }
+    ],
+    "button": [
+      { "name": "clear", "type": "reset", "title": "\u067E\u06CC\u0634 \u0641\u0631\u0636", "title-key": "button.reset" },
+      { "name": "submit", "type": "submit",
+        "activities": [ "fundLicenseRequests" ], "title": "\u062C\u0633\u062A\u062C\u0648", "title-key": "button.search" }
+    ],
+    "decorator": "org.broker.web.license.FundLicenseRequestDecorator",
+    "table-activity": "fundLicenseRequests",
+    "rowPerPageParamName": "rowPerPage",
+    "columns": [
+      { "property": "requestDate", "title": "\u062A\u0627\u0631\u06CC\u062E \u062F\u0631\u062E\u0648\u0627\u0633\u062A", "style-class": "", "sortable": "true" },
+      { "property": "name", "title": "\u0646\u0627\u0645 \u06A9\u0627\u0631\u0628\u0631", "style-class": "", "sortable": "false" },
+      { "property": "fundLicenseId", "title": "\u0634\u0645\u0627\u0631\u0647 \u06AF\u0648\u0627\u0647\u06CC", "style-class": "", "sortable": "false" },
+      { "property": "requestStateName", "title": "\u0648\u0636\u0639\u06CC\u062A \u062F\u0631\u062E\u0648\u0627\u0633\u062A", "style-class": "", "sortable": "false" },
+      { "property": "inRowButtons", "title": "\u0641\u0639\u0627\u0644\u06CC\u062A", "style-class": "", "sortable": "false" }
+    ],
+    "in-row-buttons": [
+      {
+        "name": "confirm", "title": "\u062A\u0627\u06CC\u06CC\u062F", "action": "fundLicenseRequest", "method": "list", "image": "images/detail.gif",
+        "activities": [ "confirm", "fundLicenseRequests" ],
+        "parameters": [
+          { "name": "licenseRequestId", "attribute": "licenseRequestId" },
+          { "name": "customerId", "attribute": "customerId" }
+        ]
+      }
+    ],
+    "activities": [
+      {
+        "name": "fundLicenseRequests",
+        "permissions": [ "30524" ],
+        "operations": [
+          { "order": "1", "type": "query-string", "name": "select-fund-license-request", "result-attribute-name": "" }
+        ]
+      },
+      {
+        "name": "confirm",
+        "permissions": [ "30525" ],
+        "operations": [
+          { "order":  "1", "type": "query", "name": "update-fund-license-request", "result-attribute-name": "" }
+        ]
+      }
+    ]
+  }
+]

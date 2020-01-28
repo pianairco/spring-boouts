@@ -8,6 +8,9 @@
 	<form-beans>
 		<form-bean name="helloWorldForm" 
 			type="ir.piana.dev.struts.action.HelloWorldForm"/>
+
+		<form-bean
+				name="customerMessageForm" type="org.apache.struts.validator.DynaValidatorForm" />
 	</form-beans>
 
 	<action-mappings>
@@ -16,6 +19,12 @@
 			name="helloWorldForm">
 			<forward name="success" path="index.page"/>
 		</action>
+
+		<action path="/customerMessage" type="org.springframework.web.struts.DelegatingActionProxy"
+				name="customerMessageForm" scope="request" parameter="method" validate="false" >
+			<forward name="common" path="common.page" />
+		</action>
+
 	</action-mappings>
 
 	<message-resources parameter="messages"/>
@@ -28,7 +37,7 @@
 		<set-property value="0" property="definitions-debug"/>
 		<set-property value="0" property="definitions-parser-details"/>
 		<set-property value="false" property="definitions-parser-validate"/>
-		<set-property value="/WEB-INF/tiles-defs.xml" property="definitions-config"/>
+		<set-property value="WEB-INF/tiles-defs.xml" property="definitions-config"/>
 	</plug-in>
 
 </struts-config>

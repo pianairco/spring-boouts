@@ -1,0 +1,65 @@
+[
+  {
+    "source-name": "select-fund-request-state",
+    "query-pattern": "select #columns# from frs ",
+    "sources": [
+      { "name": "FUND_REQUEST_STATE", "alias": "frs" }
+    ],
+    "columns": [
+      { "name": "frs.REQUEST_STATE_ID", "as": "requestStateId", "type": "number" },
+      { "name": "frs.REQUEST_STATE_NAME", "as": "requestStateName", "type": "string" }
+    ]
+  },
+  {
+    "source-name": "select-fund-license-request",
+    "query-pattern": "select #columns# from flr inner join tc on flr.CUSTOMER_ID = tc.CUSTOMER_ID inner join frs on flr.REQUEST_STATE_ID = frs.REQUEST_STATE_ID where #clauses# order by #orders#",
+    "sources": [
+      { "name": "FUND_LICENSE_REQUEST", "alias": "flr" },
+      { "name": "FUND_REQUEST_STATE", "alias": "frs" },
+      { "name": "T_CUSTOMER", "alias": "tc" }
+    ],
+    "columns": [
+      { "name": "flr.FUND_LICENSE_REQUEST_ID", "as": "licenseRequestId", "type": "number" },
+      { "name": "flr.REQUEST_DATE", "as": "requestDate", "type": "date" },
+      { "name": "flr.REQUEST_STATE_ID", "as": "requestStateId", "type": "number" },
+      { "name": "flr.CUSTOMER_ID", "as": "customerId", "type": "date" },
+      { "name": "frs.REQUEST_STATE_NAME", "as": "requestStateName", "type": "string" },
+      { "name": "tc.FIRST_NAME", "as": "firstName", "type": "string" },
+      { "name": "tc.LAST_NAME", "as": "lastName", "type": "string" },
+      { "name": "flr.FUND_LICENSE_ID", "as": "fundLicenseId", "type": "number" }
+    ],
+    "wheres": [
+      { "clause": "flr.REQUEST_STATE_ID = $requestState$", "conjunction": "and" },
+      { "clause": "flr.REQUEST_DATE >= '$fromCreateDate$'", "conjunction": "and" },
+      { "clause": "flr.REQUEST_DATE <= '$toCreateDate$'", "conjunction": "" }
+    ],
+    "orders": [
+      { "by": "$sortProperty$", "order": "$sortOrder$" }
+    ],
+    "params": [
+      { "name": "sortProperty", "type": "string", "key": "search.fund-license-request.sort-property" },
+      { "name": "sortOrder", "type": "string", "key": "search.fund-license-request.sort-order" },
+      { "name": "rowPerPage", "type": "string", "key": "search.fund-license-request.page-size" },
+      { "name": "requestState", "type": "string", "key": "search.fund-license-request.request-state" },
+      { "name": "fromCreateDate", "type": "string", "key": "search.fund-license-request.from-create-date" },
+      { "name": "toCreateDate", "type": "string", "key": "search.fund-license-request.to-create-date" }
+    ]
+  },
+  {
+    "source-name": "update-fund-license-request",
+    "query-pattern": "update flr set #columns# where #clauses#",
+    "sources": [
+      { "name": "fund_license_request", "alias": "flr" }
+    ],
+    "columns": [
+      { "statement": "flr.request_state_id = 1" }
+    ],
+    "wheres": [
+      { "clause": "flr.FUND_LICENSE_REQUEST_id = $licenseRequestId$", "conjunction": "and" },
+      { "clause": "flr.request_state_id = 0", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "licenseRequestId", "type": "number", "key": "licenseRequestId" }
+    ]
+  }
+]

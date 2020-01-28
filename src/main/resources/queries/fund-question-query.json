@@ -1,0 +1,187 @@
+[
+  {
+    "source-name": "base-question-status-type",
+    "query-pattern": "select #columns# from bsqt where #clauses#",
+    "sources": [
+      { "name": "BASE_STATUS_QUESTION_TYPE", "alias": "bsqt" }
+    ],
+    "columns": [
+      { "name": "bsqt.STATUS_QUESTION_TYPE_ID", "as": "statusTypeId", "type": "number" },
+      { "name": "bsqt.title", "type": "string" }
+    ],
+    "wheres": [
+      { "clause": "bsqt.is_active = 1", "conjunction": "and" },
+      { "clause": "bsqt.STATUS_QUESTION_TYPE_ID in (1, 2, 3)", "conjunction": "" }
+    ]
+  },
+  {
+    "source-name": "fund-questions",
+    "query-pattern": "select #columns# from q inner join sqt on q.STATUS_QUESTION_TYPE_ID = sqt.statusTypeId left join tc on  q.create_customer_id = tc.customer_id where #clauses# group by #groups# order by #orders#",
+    "sources": [
+      { "name": "fund_question", "alias": "q" },
+      { "name": "t_customer", "alias": "tc" },
+      { "name": "base-question-status-type", "alias": "sqt", "type": "source" }
+    ],
+    "columns": [
+      { "name": "distinct q.question_id", "as": "questionId", "type": "number" },
+      { "name": "tc.first_name", "as": "firstName", "type": "string" },
+      { "name": "tc.last_name", "as": "lastName", "type": "string" },
+      { "name": "q.create_customer_id", "as": "isCustomer", "type": "string" },
+      { "name": "q.cell_phone", "as": "cellPhone", "type": "string" },
+      { "name": "SUBSTR(q.question_desc, 1, 10)", "as": "questionDesc", "type": "string" },
+      { "name": "SUBSTR(q.answer_desc, 1, 10)", "as": "answerDesc", "type": "string" },
+      { "name": "q.create_date", "as": "createDate", "type": "number" },
+      { "name": "q.status_question_type_id", "as": "statusTypeId", "type": "number" },
+      { "name": "sqt.title", "as": "statusTitle", "type": "string" }
+    ],
+    "wheres": [
+      { "clause": "q.question_id = $questionId$", "conjunction": "and" },
+      { "clause": "q.cell_phone like '%$cellPhone$%'", "conjunction": "and" },
+      { "clause": "sqt.statusTypeId = $status$", "conjunction": "and" },
+      { "clause": "q.create_date >= '$fromCreateDate$'", "conjunction": "and" },
+      { "clause": "q.create_date <= '$toCreateDate$'", "conjunction": "" }
+    ],
+    "groups": [
+    ],
+    "orders": [
+      { "by": "$sortProperty$", "order": "$sortOrder$" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "number", "key": "search.fund-question.ticket-number" },
+      { "name": "sortProperty", "type": "string", "key": "search.fund-question.sort-property" },
+      { "name": "sortOrder", "type": "string", "key": "search.fund-question.sort-order" },
+      { "name": "rowPerPage", "type": "string", "key": "search.fund-question.page-size" },
+      { "name": "status", "type": "string", "key": "search.fund-question.status" },
+      { "name": "cellPhone", "type": "string", "key": "search.fund-question.cell-phone" },
+      { "name": "fromCreateDate", "type": "string", "key": "search.fund-question.from-create-date" },
+      { "name": "toCreateDate", "type": "string", "key": "search.fund-question.to-create-date" }
+    ]
+  },
+  {
+    "source-name": "hibernate-sequence-nextval",
+    "select-type": "int",
+    "query-pattern": "select #columns# from dual",
+    "columns": [
+      { "name": "hibernate_sequence.nextval ", "as": "questionId", "type": "number" }
+    ]
+  },
+  {
+    "source-name": "select-fund-question-status",
+    "query-pattern": "select #columns# from fq where #clauses#",
+    "select-type": "int",
+    "sources": [
+      { "name": "fund_question", "alias": "fq" }
+    ],
+    "columns": [
+      { "name": "fq.status_question_type_id", "as": "questionStatusId", "type": "number" }
+    ],
+    "wheres": [
+      { "clause": "fq.question_id = $questionId$", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "string", "key": "questionId" }
+    ]
+  },
+  {
+    "source-name": "select-fund-question",
+    "query-pattern": "select #columns# from q where #clauses#",
+    "execute-if": [
+      { "query-for-int": "select-fund-question-status", "evaluation": "<", "target": "4" }
+    ],
+    "before": [],
+    "after": [
+      { "attribute-name": "status-to-register", "query-name": "update-fund-question-status-to-view" }
+    ],
+    "sources": [
+      { "name": "fund_question", "alias": "q" }
+    ],
+    "columns": [
+      { "name": "distinct q.question_id", "as": "questionId", "type": "number", "request-key": "questionId" },
+      { "name": "q.cell_phone", "as": "cellPhone", "type": "string", "request-key": "cellPhone" },
+      { "name": "q.create_customer_id", "as": "createCustomerId", "type": "string", "request-key": "cellPhone" },
+      { "name": "q.question_desc", "as": "questionDesc", "type": "string", "request-key": "questionDesc" },
+      { "name": "q.answer_desc", "as": "answerDesc", "type": "string", "request-key": "answerDesc" },
+      { "name": "q.create_date", "as": "createDate", "type": "string", "request-key": "createDate" }
+    ],
+    "wheres": [
+      { "clause": "q.question_id = $questionId$", "conjunction": "and" },
+      { "clause": "q.status_question_type_id <= 3", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "string", "key": "questionId" }
+    ]
+  },
+  {
+    "source-name": "update-fund-question-status-to-view",
+    "query-pattern": "update q set #columns# where #clauses#",
+    "sources": [
+      { "name": "fund_question", "alias": "q" }
+    ],
+    "columns": [
+      { "statement": "q.status_question_type_id = 2" },
+      { "statement": "q.MODIFICATION_DATE = #date.now#" },
+      { "statement": "q.MODIFICATION_TIME = #time.now#" }
+    ],
+    "wheres": [
+      { "clause": "q.status_question_type_id = 1", "conjunction": "and" },
+      { "clause": "q.question_id = $questionId$", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "number", "key": "questionId" }
+    ]
+  },
+  {
+    "source-name": "update-fund-question",
+    "query-pattern": "update q set #columns# where #clauses#",
+    "before": [
+    ],
+    "after": [
+      { "attribute-name" : "insert-fund-question", "query-name": "update-fund-question-status-to-answer" }
+    ],
+    "sources": [
+      { "name": "fund_question", "alias": "q" }
+    ],
+    "columns": [
+      { "statement": "q.answer_desc = '$answerDesc$'" },
+      { "statement": "q.update_date = '$updateDate$'" }
+    ],
+    "wheres": [
+      { "clause": "q.question_id = $questionId$", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "number", "key": "insert.fund-question.question-id" },
+      { "name": "answerDesc", "type": "string", "key": "insert.fund-question.answer-desc" },
+      { "name": "updateDate", "type": "string", "key": "insert.fund-question.update-date" }
+    ]
+  },
+  {
+    "source-name": "update-fund-question-status-to-answer",
+    "query-pattern": "update q set #columns# where #clauses#",
+    "sources": [
+      { "name": "fund_question", "alias": "q" }
+    ],
+    "columns": [
+      { "statement": "q.status_question_type_id = 3" },
+      { "statement": "q.MODIFICATION_DATE = #date.now#" },
+      { "statement": "q.MODIFICATION_TIME = #time.now#" },
+      { "statement": "q.UPDATE_USER_ID = #customer.id#" }
+    ],
+    "wheres": [
+      { "clause": "q.status_question_type_id <= 2", "conjunction": "and" },
+      { "clause": "q.question_id = $questionId$", "conjunction": "" }
+    ],
+    "params": [
+      { "name": "questionId", "type": "number", "key": "insert.fund-question.question-id" }
+    ]
+  },
+  {
+    "source-name": "select-company-sms-number",
+    "query-pattern": "select #columns# from c",
+    "sources": [
+      { "name": "company", "alias": "c" }
+    ],
+    "columns": [
+      { "name": "c.sms_number", "as": "companySmsNumber", "type": "text", "request-key": "companySmsNumber" }
+    ]
+  }
+]

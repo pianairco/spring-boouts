@@ -24,8 +24,8 @@ public class MyServlet extends ActionServlet {
     @Autowired
     private TestDao testDao;
 
-//    @PostConstruct
-//    public void init() {
-//        System.out.println("init");
-//    }
+    @PostConstruct
+    public void initModule() {
+        System.out.println("init");
+    }
 }
